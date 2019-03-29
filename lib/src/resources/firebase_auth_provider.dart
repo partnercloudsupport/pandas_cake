@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:pandas_cake/dto/user.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pandas_cake/src/models/user.dart';
 
 enum AuthStatus {
   SUCCESS,
@@ -20,13 +19,13 @@ abstract class BaseAuth {
   Future<void> signOut();
 }
 
-class Auth implements BaseAuth {
+class FirebaseAuthProvider implements BaseAuth {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final Firestore _db = Firestore.instance;
 
   Future<AuthStatus> signInWithEmailAndPassword(User user) async {
     try {
-      await _auth.signInWithEmailAndPassword(email: user.email, password: user.password);
+      await _auth.signInWithEmailAndPassword(
+          email: user.email, password: user.password);
       return AuthStatus.SUCCESS;
     } catch (e) {
       print(e);
@@ -35,26 +34,13 @@ class Auth implements BaseAuth {
   }
 
   Future<AuthStatus> createUserWithEmailAndPassword(User user) async {
-    FirebaseUser fbUser;
     try {
-      fbUser = await _auth.createUserWithEmailAndPassword(
+      FirebaseUser fbUser = await _auth.createUserWithEmailAndPassword(
           email: user.email, password: user.password);
+      user.uid = fbUser.uid;
     } catch (e) {
       print(e);
       return AuthStatus.ERROR_EMAIL_ALREADY_IN_USE;
-    }
-    if (fbUser.uid != null) {
-      user.uid = fbUser.uid;
-      try {
-        await _db
-            .collection('users')
-            .document(fbUser.uid)
-            .setData(user.toJson());
-        return AuthStatus.SUCCESS;
-      } catch (e) {
-        print('Error in create a new user:  $e');
-        return AuthStatus.ERROR;
-      }
     }
     return AuthStatus.ERROR;
   }

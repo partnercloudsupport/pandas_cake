@@ -1,4 +1,4 @@
-import 'package:pandas_cake/services/auth.dart';
+import 'package:pandas_cake/src/resources/firebase_auth_provider.dart';
 
 abstract class BaseFireUtil {
   String getMessage(AuthStatus status);

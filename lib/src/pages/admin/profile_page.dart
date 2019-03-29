@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pandas_cake/dto/user.dart';
+import 'package:pandas_cake/src/models/user.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;

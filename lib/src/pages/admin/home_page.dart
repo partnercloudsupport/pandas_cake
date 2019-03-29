@@ -1,34 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:pandas_cake/services/auth.dart';
+import 'package:pandas_cake/src/blocs/bloc_base.dart';
+import 'package:pandas_cake/src/blocs/bloc_home.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({this.auth, this.onSignOut});
-
-  final BaseAuth auth;
-  final VoidCallback onSignOut;
-
-  void _signOut() async {
-    try {
-      await auth.signOut();
-      onSignOut();
-    } catch (e) {
-      print(e);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    HomeBloc bloc = BlocProvider.of<HomeBloc>(context);
+
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('Panda\'s Cake'),
-        backgroundColor: Colors.pink[200],
+        backgroundColor: Color(0xFFFFCCCB),
         actions: <Widget>[
           new FlatButton(
             child: new Text(
               'Logout',
               style: new TextStyle(fontSize: 17.0, color: Colors.white),
             ),
-            onPressed: _signOut,
+            onPressed: bloc.signOut,
           )
         ],
       ),
