@@ -1,4 +1,5 @@
 class User {
+  final collection = 'users';
   String uid;
   String name;
   String email;

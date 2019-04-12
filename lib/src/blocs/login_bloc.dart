@@ -44,8 +44,10 @@ class LoginBloc implements BlocBase {
       try {
         if (_formTypeController.value == FormType.login) {
           status = await _repository.signInWithEmailAndPassword(_user);
+          _repository.save(_user.collection, _user.uid, _user.toJson());
         } else {
           status = await _repository.createUserWithEmailAndPassword(_user);
+
         }
         if (status == AuthStatus.SUCCESS) {
           onSignIn();
