@@ -38,11 +38,11 @@ class FirebaseAuthProvider implements BaseAuth {
       FirebaseUser fbUser = await _auth.createUserWithEmailAndPassword(
           email: user.email, password: user.password);
       user.uid = fbUser.uid;
+      return AuthStatus.SUCCESS;
     } catch (e) {
       print(e);
       return AuthStatus.ERROR_EMAIL_ALREADY_IN_USE;
     }
-    return AuthStatus.ERROR;
   }
 
   Future<String> currentUser() async {

@@ -18,7 +18,7 @@ class Item {
       : urlImage = json['urlImage'],
         name = json['name'],
         description = json['description'],
-        value = json['value'];
+        value = json['value'] as double;
 
   Map<String, dynamic> toJson() => {
     'urlImage': urlImage,

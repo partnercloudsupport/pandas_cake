@@ -21,5 +21,7 @@ class Repository {
 
   Future<StoreStatus> save(String collection, String document, Map<String, dynamic> json) => _firestoreProvider.save(collection, document, json);
 
+  Stream findAll(String collection) => _firestoreProvider.findAll(collection);
+
   Future<String> uploadImage(File file) => _firestoreStorage.uploadImage(file);
 }

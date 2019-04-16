@@ -25,6 +25,12 @@ class _NewItemState extends State<NewItem> {
   }
 
   @override
+  void dispose() {
+    bloc.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
@@ -99,7 +105,7 @@ class _NewItemState extends State<NewItem> {
       case 1:
         return BlocProvider<CalculatorBloc>(
           child: CalculatorWidget(),
-          bloc: CalculatorBloc(valuePress: bloc.setValue),
+          bloc: CalculatorBloc(valuePress: bloc.setValue, value: bloc.getItem.value),
         );
       case 2:
         return _buildDescription();

@@ -17,15 +17,20 @@ class _LoginPageState extends State<LoginPage> {
     bloc = BlocProvider.of<LoginBloc>(context);
     return Scaffold(
       body: Builder(
-          builder: (context) => Container(
+        builder: (context) => Container(
               padding: EdgeInsets.all(16.0),
               margin: MediaQuery.of(context).padding,
               child: new Form(
-                  key: bloc.getFormKey,
-                  child: new ListView(children: <Widget>[
+                key: bloc.getFormKey,
+                child: new ListView(
+                  children: <Widget>[
                     _buildDisplayImage(context),
                     _body(),
-                  ])))),
+                  ],
+                ),
+              ),
+            ),
+      ),
     );
   }
 
@@ -155,33 +160,39 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
               new SizedBox(
-                  width: double.infinity,
-                  child: new Padding(
-                      padding: EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 0.0),
-                      child: ButtonTheme(
-                        height: 45.0,
-                        child: new RaisedButton(
-                          elevation: 5.0,
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(20.0)),
-                          color: Theme.of(context).primaryColor,
-                          onPressed: () => bloc.validateAndSubmit(context),
-                          child: (isLoading.hasData && !isLoading.data)
-                              ? new Text('Create account',
-                                  style: new TextStyle(fontSize: 20.0))
-                              : CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                      Theme.of(context).accentColor),
-                                ),
-                        ),
-                      ))),
+                width: double.infinity,
+                child: new Padding(
+                  padding: EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 0.0),
+                  child: ButtonTheme(
+                    height: 45.0,
+                    child: new RaisedButton(
+                      elevation: 5.0,
+                      shape: new RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(20.0)),
+                      color: Theme.of(context).primaryColor,
+                      onPressed: () => bloc.validateAndSubmit(context),
+                      child: (isLoading.hasData && !isLoading.data)
+                          ? new Text('Create account',
+                              style: new TextStyle(fontSize: 20.0))
+                          : CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  Theme.of(context).accentColor),
+                            ),
+                    ),
+                  ),
+                ),
+              ),
               new SizedBox(
-                  width: double.infinity,
-                  child: new FlatButton(
-                      onPressed: bloc.moveToLogin,
-                      child: new Text('Have an account? Login',
-                          style: new TextStyle(
-                              fontSize: 18.0, fontWeight: FontWeight.w300))))
+                width: double.infinity,
+                child: new FlatButton(
+                  onPressed: bloc.moveToLogin,
+                  child: new Text(
+                    'Have an account? Login',
+                    style: new TextStyle(
+                        fontSize: 18.0, fontWeight: FontWeight.w300),
+                  ),
+                ),
+              )
             ],
           ),
     );

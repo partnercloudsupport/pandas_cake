@@ -13,7 +13,7 @@ class FirestoreStorage {
     StorageTaskSnapshot downloadUrl = await task.onComplete;
     return await downloadUrl.ref.getDownloadURL();
   }
-//
+
 //  Future<File> downloadImage(String url) async {
 //    String uri = Uri.decodeFull(url);
 //    final RegExp regExp = RegExp('([^?/]*\.(jpg))');

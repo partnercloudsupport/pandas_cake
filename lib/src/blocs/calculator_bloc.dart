@@ -3,13 +3,17 @@ import 'package:pandas_cake/src/blocs/bloc_base.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 class CalculatorBloc extends BlocBase {
-  CalculatorBloc({@required this.valuePress});
+  CalculatorBloc({@required this.valuePress, @required this.value});
 
+  double value;
   final _moneyMaskController = MoneyMaskedTextController(decimalSeparator: ',', thousandSeparator: '.', leftSymbol: 'R\$ ');
   Function(double) valuePress;
-  double value = 0;
 
   MoneyMaskedTextController get getMoneyMaskedController => _moneyMaskController;
+
+  void init() {
+    _moneyMaskController.updateValue(value);
+  }
 
   @override
   void dispose() {

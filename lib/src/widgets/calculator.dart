@@ -11,9 +11,20 @@ class _CalculatorState extends State<CalculatorWidget> {
   CalculatorBloc bloc;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     bloc = BlocProvider.of<CalculatorBloc>(context);
+    bloc.init();
+  }
 
+  @override
+  void dispose() {
+    bloc.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         Expanded(
