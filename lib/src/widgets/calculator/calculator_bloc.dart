@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pandas_cake/src/blocs/bloc_base.dart';
+import 'package:pandas_cake/src/utils/bloc_base.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 class CalculatorBloc extends BlocBase {
@@ -17,6 +17,7 @@ class CalculatorBloc extends BlocBase {
 
   @override
   void dispose() {
+    _moneyMaskController.dispose();
   }
 
   void buttonPressed(String buttonText) {

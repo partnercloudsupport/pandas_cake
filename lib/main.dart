@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pandas_cake/src/pages/root_page.dart';
-import 'package:pandas_cake/src/blocs/root_bloc.dart';
-import 'package:pandas_cake/src/blocs/bloc_base.dart';
+import 'package:pandas_cake/src/pages/root_bloc.dart';
+import 'package:pandas_cake/src/utils/bloc_base.dart';
 
 void main() => runApp(new MyApp());
 

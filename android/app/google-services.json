@@ -1,39 +1,37 @@
 {
   "project_info": {
-    "project_number": "453127689169",
-    "firebase_url": "https://pandas-cake.firebaseio.com",
-    "project_id": "pandas-cake",
-    "storage_bucket": "pandas-cake.appspot.com"
+    "project_number": "861323649191",
+    "firebase_url": "https://panda-cake.firebaseio.com",
+    "project_id": "panda-cake",
+    "storage_bucket": "panda-cake.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:453127689169:android:b6fe8f700897ee98",
+        "mobilesdk_app_id": "1:861323649191:android:b6fe8f700897ee98",
         "android_client_info": {
           "package_name": "br.com.pandas_cake"
         }
       },
       "oauth_client": [
         {
-          "client_id": "453127689169-jotirncbusl6nl7kaolv2gmqqjnf9b1j.apps.googleusercontent.com",
+          "client_id": "861323649191-mmaa6c57r3nc94e6va7tq3v48kaeuf96.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBomf75g7_KMh7mvMCC6Eh8vR6tibDac-o"
+          "current_key": "AIzaSyCDS3h0HDtUgWNkTb7fLmr0awbi1nt1HN4"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "861323649191-mmaa6c57r3nc94e6va7tq3v48kaeuf96.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

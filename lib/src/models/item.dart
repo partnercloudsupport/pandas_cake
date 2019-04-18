@@ -2,6 +2,7 @@ import 'dart:io';
 
 class Item {
   final String collection = 'item';
+  String id;
   File image;
   String urlImage;
   String name;

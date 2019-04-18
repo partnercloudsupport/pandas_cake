@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:pandas_cake/src/blocs/bloc_base.dart';
-import 'package:pandas_cake/src/blocs/bloc_home.dart';
-import 'package:pandas_cake/src/blocs/login_bloc.dart';
-import 'package:pandas_cake/src/pages/admin/home_page.dart';
-import 'package:pandas_cake/src/blocs/root_bloc.dart';
-import 'login_page.dart';
+import 'package:pandas_cake/src/utils/bloc_base.dart';
+import 'package:pandas_cake/src/pages/admin/home/home_bloc.dart';
+import 'package:pandas_cake/src/pages/login/bloc/login_bloc.dart';
+import 'package:pandas_cake/src/pages/admin/home/home_page.dart';
+import 'package:pandas_cake/src/pages/root_bloc.dart';
+import 'package:pandas_cake/src/pages/login/page/login_page.dart';
 
 class RootPage extends StatefulWidget {
   @override
@@ -22,7 +22,7 @@ class _RootPageState extends State<RootPage> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder (
+    return StreamBuilder(
       stream: bloc.getStatus,
       builder: (context, snapshot) => _generateBody(snapshot),
     );
@@ -30,8 +30,8 @@ class _RootPageState extends State<RootPage> {
 
   @override
   void dispose() {
-    super.dispose();
     bloc.dispose();
+    super.dispose();
   }
 
   Widget _generateBody(status) {
@@ -39,17 +39,23 @@ class _RootPageState extends State<RootPage> {
       case LoginStatus.SIGN_OUT:
         return BlocProvider<LoginBloc>(
           child: LoginPage(),
-          bloc: LoginBloc(onSignIn: bloc.signIn,),
+          bloc: LoginBloc(
+            onSignIn: bloc.signIn,
+          ),
         );
       case LoginStatus.SIGN_IN:
         return BlocProvider<HomeBloc>(
           child: HomePage(),
-          bloc: HomeBloc(onSignOut: bloc.signedOut,),
+          bloc: HomeBloc(
+            onSignOut: bloc.signedOut,
+          ),
         );
       default:
         return BlocProvider<LoginBloc>(
           child: LoginPage(),
-          bloc: LoginBloc(onSignIn: bloc.signIn,),
+          bloc: LoginBloc(
+            onSignIn: bloc.signIn,
+          ),
         );
     }
   }

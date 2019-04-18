@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pandas_cake/src/blocs/bloc_base.dart';
-import 'package:pandas_cake/src/blocs/calculator_bloc.dart';
+import 'package:pandas_cake/src/utils/bloc_base.dart';
+import 'package:pandas_cake/src/widgets/calculator/calculator_bloc.dart';
 
 class CalculatorWidget extends StatefulWidget{
   @override

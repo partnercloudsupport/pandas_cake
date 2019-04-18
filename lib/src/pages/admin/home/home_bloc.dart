@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pandas_cake/src/blocs/bloc_base.dart';
+import 'package:pandas_cake/src/utils/bloc_base.dart';
 import 'package:pandas_cake/src/resources/repository.dart';
 import 'package:rxdart/rxdart.dart';
 

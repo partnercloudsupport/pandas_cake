@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:pandas_cake/src/resources/repository.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:pandas_cake/src/blocs/bloc_base.dart';
+import 'package:pandas_cake/src/utils/bloc_base.dart';
 
 enum LoginStatus { SIGN_OUT, SIGN_IN }
 

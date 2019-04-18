@@ -1,22 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-enum StoreStatus { SUCCESS, ERROR }
+enum StoreStatus { SUCCESS, ERROR, UPDATE }
 
 class FirestoreProvider {
   final Firestore _db = Firestore.instance;
 
-  Future<StoreStatus> save(String collection, String document,
-      Map<String, dynamic> json) async {
+  Future<StoreStatus> save(
+      String collection, String document, Map<String, dynamic> json) async {
     try {
       await _db.collection(collection).document(document).setData(json);
       return StoreStatus.SUCCESS;
     } catch (e) {
-      print(e);
+      print(e.code);
       return StoreStatus.ERROR;
     }
   }
 
-  Stream findAll(String collection)  {
+  Stream findAll(String collection) {
     return _db.collection(collection).snapshots();
   }
 }

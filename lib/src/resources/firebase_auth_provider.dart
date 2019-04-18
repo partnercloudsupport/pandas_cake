@@ -1,13 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pandas_cake/src/models/user.dart';
-
-enum AuthStatus {
-  SUCCESS,
-  ERROR,
-  ERROR_EMAIL_ALREADY_IN_USE,
-  ERROR_INVALID_EMAIL
-}
+import 'package:pandas_cake/src/utils/firebase_util.dart';
 
 abstract class BaseAuth {
   Future<AuthStatus> signInWithEmailAndPassword(User user);
@@ -28,8 +22,8 @@ class FirebaseAuthProvider implements BaseAuth {
           email: user.email, password: user.password);
       return AuthStatus.SUCCESS;
     } catch (e) {
-      print(e);
-      return AuthStatus.ERROR_INVALID_EMAIL;
+      print(e.code);
+      return FireBaseUtil().getStatus(e.code);
     }
   }
 
@@ -40,8 +34,8 @@ class FirebaseAuthProvider implements BaseAuth {
       user.uid = fbUser.uid;
       return AuthStatus.SUCCESS;
     } catch (e) {
-      print(e);
-      return AuthStatus.ERROR_EMAIL_ALREADY_IN_USE;
+      print(e.code);
+      return FireBaseUtil().getStatus(e.code);
     }
   }
 

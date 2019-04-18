@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:pandas_cake/src/blocs/calculator_bloc.dart';
-import 'package:pandas_cake/src/widgets/calculator.dart';
+import 'package:pandas_cake/src/widgets/calculator/calculator_bloc.dart';
+import 'package:pandas_cake/src/widgets/calculator/calculator.dart';
 import 'package:zefyr/zefyr.dart';
-import 'package:pandas_cake/src/blocs/bloc_base.dart';
-import 'package:pandas_cake/src/blocs/new_item_bloc.dart';
+import 'package:pandas_cake/src/utils/bloc_base.dart';
+import 'package:pandas_cake/src/pages/admin/item/new_item_bloc.dart';
 
-enum NewItemStatus { SAVED, ERROR }
+enum NewItemStatus { SAVED, ERROR, UPDATE }
 
 class NewItem extends StatefulWidget {
   @override
@@ -58,40 +58,8 @@ class _NewItemState extends State<NewItem> {
                 ),
                 Expanded(
                   flex: 1,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Expanded(
-                        child: FlatButton(
-                          child: Text(
-                            'Voltar',
-                            style: TextStyle(fontSize: 16.0),
-                          ),
-                          onPressed:
-                              index.data == 0 ? null : () => bloc.backStep(),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
-                      ),
-                      Expanded(
-                        child: RaisedButton(
-                          child: Text(
-                            index.data == 2 ? 'Salvar' : 'Avançar',
-                            style:
-                                TextStyle(fontSize: 16.0, color: Colors.white),
-                          ),
-                          onPressed: index.data == 2
-                              ? () => bloc.submit(context)
-                              : () => bloc.nextStep(),
-                          color: Theme.of(containerContext).accentColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                )
+                  child: _buildNavigationButtons(context, index.data),
+                ),
               ],
             ),
       ),
@@ -105,7 +73,8 @@ class _NewItemState extends State<NewItem> {
       case 1:
         return BlocProvider<CalculatorBloc>(
           child: CalculatorWidget(),
-          bloc: CalculatorBloc(valuePress: bloc.setValue, value: bloc.getItem.value),
+          bloc: CalculatorBloc(
+              valuePress: bloc.setValue, value: bloc.getItem.value),
         );
       case 2:
         return _buildDescription();
@@ -141,7 +110,9 @@ class _NewItemState extends State<NewItem> {
 
   Widget _buildDescription() {
     return Container(
-      decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.vertical(top: new Radius.circular(10.0))),
+      decoration: BoxDecoration(
+          border: Border.all(),
+          borderRadius: BorderRadius.vertical(top: new Radius.circular(10.0))),
       child: ZefyrScaffold(
         child: ZefyrTheme(
           data: ZefyrThemeData(
@@ -186,7 +157,13 @@ class _NewItemState extends State<NewItem> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0)),
                     elevation: 3,
-                    child: _loadImage(image.data),
+                    child: StreamBuilder(
+                      stream: bloc.getLoadingImg,
+                      builder: (context, loadingImg) =>
+                          loadingImg.hasData && loadingImg.data
+                              ? _loadingImg()
+                              : _loadImage(image.data),
+                    ),
                   ),
                 )
               ],
@@ -221,6 +198,13 @@ class _NewItemState extends State<NewItem> {
     }
   }
 
+  Widget _loadingImg() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[CircularProgressIndicator()],
+    );
+  }
+
   void _showModalImageSheet(context) {
     showModalBottomSheet(
       context: context,
@@ -247,6 +231,39 @@ class _NewItemState extends State<NewItem> {
           ],
         );
       },
+    );
+  }
+
+  _buildNavigationButtons(context, int index) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Expanded(
+          child: FlatButton(
+            child: Text(
+              'Voltar',
+              style: TextStyle(fontSize: 16.0),
+            ),
+            onPressed: index == 0 ? null : () => bloc.backStep(),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        Expanded(
+          child: RaisedButton(
+            child: Text(
+              index == 2 ? 'Salvar' : 'Avançar',
+              style: TextStyle(fontSize: 16.0, color: Colors.white),
+            ),
+            onPressed:
+                index == 2 ? () => bloc.submit(context) : () => bloc.nextStep(),
+            color: Theme.of(context).accentColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        )
+      ],
     );
   }
 }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:pandas_cake/src/blocs/bloc_base.dart';
-import 'package:pandas_cake/src/blocs/bloc_home.dart';
-import 'package:pandas_cake/src/blocs/catalog_bloc.dart';
-import 'package:pandas_cake/src/blocs/new_item_bloc.dart';
-import 'package:pandas_cake/src/pages/admin/catalog_page.dart';
-import 'package:pandas_cake/src/pages/admin/new_item.dart';
+import 'package:pandas_cake/src/utils/bloc_base.dart';
+import 'package:pandas_cake/src/pages/admin/home/home_bloc.dart';
+import 'package:pandas_cake/src/pages/admin/catalog/catalog_bloc.dart';
+import 'package:pandas_cake/src/pages/admin/item/new_item_bloc.dart';
+import 'package:pandas_cake/src/pages/admin/catalog/catalog_page.dart';
+import 'package:pandas_cake/src/pages/admin/item/new_item.dart';
+import 'package:pandas_cake/src/resources/firestore_provider.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -63,8 +64,8 @@ class HomePage extends StatelessWidget {
   }
 
   Future _settingModalBottomSheet(context) async {
-    NewItemStatus status = await Navigator.of(context).push(
-      new MaterialPageRoute<NewItemStatus>(
+    StoreStatus status = await Navigator.of(context).push(
+      new MaterialPageRoute<StoreStatus>(
           builder: (context) {
             return BlocProvider<NewItemBloc>(
               child: new NewItem(),
@@ -73,7 +74,7 @@ class HomePage extends StatelessWidget {
           },
           fullscreenDialog: true),
     );
-    if (status == NewItemStatus.SAVED) {
+    if (status == StoreStatus.SUCCESS) {
       Scaffold.of(context).showSnackBar(
         new SnackBar(
           content: new Text("Item salvo com sucesso!"),

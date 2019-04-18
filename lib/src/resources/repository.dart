@@ -4,6 +4,7 @@ import 'package:pandas_cake/src/models/user.dart';
 import 'package:pandas_cake/src/resources/firebase_auth_provider.dart';
 import 'package:pandas_cake/src/resources/firebase_storage_provider.dart';
 import 'package:pandas_cake/src/resources/firestore_provider.dart';
+import 'package:pandas_cake/src/utils/firebase_util.dart';
 
 class Repository {
   final _firebaseAuthProvider = FirebaseAuthProvider();

@@ -1,24 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:pandas_cake/src/models/user.dart';
-import 'package:pandas_cake/src/resources/firebase_auth_provider.dart';
 import 'package:pandas_cake/src/utils/firebase_util.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:pandas_cake/src/resources/repository.dart';
-import 'package:pandas_cake/src/blocs/bloc_base.dart';
+import 'package:pandas_cake/src/utils/bloc_base.dart';
 
-enum FormType { login, register }
-
-class LoginBloc implements BlocBase {
-  LoginBloc({this.onSignIn});
+class SignInBloc implements BlocBase {
+  SignInBloc({this.onSignIn, this.onCreateAccount});
 
   final VoidCallback onSignIn;
-  final Repository _repository = Repository();
-  final User _user = new User();
+  final VoidCallback onCreateAccount;
+  final _repository = Repository();
+  final _user = new User();
   final _formKey = new GlobalKey<FormState>();
-  final _formTypeController = BehaviorSubject<FormType>.seeded(FormType.login);
   final _isLoadingController = BehaviorSubject<bool>.seeded(false);
-
-  Stream get getFormType => _formTypeController.stream;
 
   Stream get getLoading => _isLoadingController.stream;
 
@@ -38,17 +33,9 @@ class LoginBloc implements BlocBase {
   }
 
   void validateAndSubmit(BuildContext context) async {
-    AuthStatus status;
     setLoading(true);
     if (_validateAndSave()) {
-      try {
-        if (_formTypeController.value == FormType.login) {
-          status = await _repository.signInWithEmailAndPassword(_user);
-          _repository.save(_user.collection, _user.uid, _user.toJson());
-        } else {
-          status = await _repository.createUserWithEmailAndPassword(_user);
-
-        }
+      await _repository.signInWithEmailAndPassword(_user).then((status) {
         if (status == AuthStatus.SUCCESS) {
           onSignIn();
         } else {
@@ -57,32 +44,15 @@ class LoginBloc implements BlocBase {
             content: new Text(FireBaseUtil().getMessage(status)),
           ));
         }
-      } catch (e) {
-        print('Error: $e');
-      }
+      });
     }
-  }
-
-  void handleRadioSexChange(String sex) {
-    _user.sex = sex;
   }
 
   void setLoading(bool value) {
     _isLoadingController.sink.add(value);
   }
 
-  void moveToRegister() {
-    _formKey.currentState.reset();
-    _formTypeController.sink.add(FormType.register);
-  }
-
-  void moveToLogin() {
-    _formKey.currentState.reset();
-    _formTypeController.sink.add(FormType.login);
-  }
-
   void dispose() {
-    _formTypeController.close();
     _isLoadingController.close();
   }
 }
