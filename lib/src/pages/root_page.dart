@@ -4,7 +4,7 @@ import 'package:pandas_cake/src/pages/admin/home/home_bloc.dart';
 import 'package:pandas_cake/src/pages/login/bloc/login_bloc.dart';
 import 'package:pandas_cake/src/pages/admin/home/home_page.dart';
 import 'package:pandas_cake/src/pages/root_bloc.dart';
-import 'package:pandas_cake/src/pages/login/page/login_page.dart';
+import 'package:pandas_cake/src/pages/login/pages/login_page.dart';
 
 class RootPage extends StatefulWidget {
   @override
