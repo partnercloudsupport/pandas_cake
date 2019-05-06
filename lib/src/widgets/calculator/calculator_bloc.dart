@@ -17,7 +17,6 @@ class CalculatorBloc extends BlocBase {
 
   @override
   void dispose() {
-    _moneyMaskController.dispose();
   }
 
   void buttonPressed(String buttonText) {

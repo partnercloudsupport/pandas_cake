@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:pandas_cake/src/resources/firestore_provider.dart';
 import 'package:pandas_cake/src/utils/bloc_base.dart';
 import 'package:pandas_cake/src/pages/admin/catalog/catalog_bloc.dart';
 import 'package:pandas_cake/src/pages/admin/item/new_item_bloc.dart';
 import 'package:pandas_cake/src/models/item.dart';
-import 'package:pandas_cake/src/pages/admin/item/new_item.dart';
+import 'package:pandas_cake/src/pages/admin/item/new_item_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:pandas_cake/src/utils/number_util.dart';
 
 class CatalogPage extends StatelessWidget {
   @override
@@ -17,15 +19,34 @@ class CatalogPage extends StatelessWidget {
       child: StreamBuilder<QuerySnapshot>(
         stream: bloc.getListStream,
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData)
+          if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.data.documents.length == 0) {
+            return _buildNoResult(context);
+          }
           return ListView.builder(
-            itemBuilder: (context, index) =>
-                _buildListItem(parentContext, snapshot.data.documents[index], bloc),
+            itemBuilder: (context, index) => _buildListItem(
+                  parentContext,
+                  snapshot.data.documents[index],
+                  bloc,
+                ),
             itemCount: snapshot.data.documents.length,
             shrinkWrap: true,
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildNoResult(BuildContext context) {
+    return Center(
+      child: Text(
+        'Nenhum item cadastrado ainda :(',
+        style: TextStyle(
+            color: Theme.of(context).accentColor,
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold),
       ),
     );
   }
@@ -37,7 +58,7 @@ class CatalogPage extends StatelessWidget {
     return Card(
       elevation: 3,
       child: ListTile(
-        onTap: () => _settingModalBottomSheet(context, item),
+        onTap: () => _settingModalBottomSheet(context, item, bloc),
         leading: Container(
           width: 50.0,
           height: 50.0,
@@ -60,15 +81,16 @@ class CatalogPage extends StatelessWidget {
               fontWeight: FontWeight.bold,
               color: Theme.of(context).accentColor),
         ),
-        subtitle: Text(bloc.numberFormat(item.value, context)),
+        subtitle: Text(NumberUtils.numberFormat(item.value)),
         trailing: Icon(Icons.keyboard_arrow_right),
       ),
     );
   }
 
-  Future _settingModalBottomSheet(BuildContext context, Item item) async {
-    NewItemStatus status = await Navigator.of(context).push(
-      new MaterialPageRoute<NewItemStatus>(
+  Future _settingModalBottomSheet(
+      BuildContext context, Item item, CatalogBloc bloc) async {
+    StoreStatus status = await Navigator.of(context).push(
+      new MaterialPageRoute<StoreStatus>(
           builder: (context) {
             return BlocProvider<NewItemBloc>(
               child: new NewItem(),
@@ -77,12 +99,6 @@ class CatalogPage extends StatelessWidget {
           },
           fullscreenDialog: true),
     );
-    if (status == NewItemStatus.SAVED) {
-      Scaffold.of(context).showSnackBar(
-        new SnackBar(
-          content: new Text("Item salvo com sucesso!"),
-        ),
-      );
-    }
+    bloc.onSaveItem(status);
   }
 }

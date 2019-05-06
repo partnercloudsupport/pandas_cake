@@ -7,8 +7,6 @@ import 'package:zefyr/zefyr.dart';
 import 'package:pandas_cake/src/utils/bloc_base.dart';
 import 'package:pandas_cake/src/pages/admin/item/new_item_bloc.dart';
 
-enum NewItemStatus { SAVED, ERROR, UPDATE }
-
 class NewItem extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new _NewItemState();
@@ -74,7 +72,9 @@ class _NewItemState extends State<NewItem> {
         return BlocProvider<CalculatorBloc>(
           child: CalculatorWidget(),
           bloc: CalculatorBloc(
-              valuePress: bloc.setValue, value: bloc.getItem.value),
+            valuePress: bloc.setValue,
+            value: bloc.getItem.value,
+          ),
         );
       case 2:
         return _buildDescription();
@@ -144,6 +144,7 @@ class _NewItemState extends State<NewItem> {
                   key: bloc.getFormKey,
                   child: TextFormField(
                     decoration: InputDecoration(labelText: 'Nome'),
+                    textCapitalization: TextCapitalization.words,
                     validator: (value) =>
                         value.isEmpty ? 'Informe um nome do produto' : null,
                     onSaved: (value) => bloc.getItem.name = value,

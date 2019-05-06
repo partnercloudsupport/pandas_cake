@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pandas_cake/src/pages/login/bloc/sign_in_bloc.dart';
-import 'package:pandas_cake/src/pages/login/page/sign_in_page.dart';
+import 'package:pandas_cake/src/pages/login/pages/sign_in_page.dart';
 import 'package:pandas_cake/src/pages/login/bloc/sign_up_bloc.dart';
-import 'package:pandas_cake/src/pages/login/page/sign_up_page.dart';
+import 'package:pandas_cake/src/pages/login/pages/sign_up_page.dart';
 import 'package:pandas_cake/src/utils/bloc_base.dart';
 import 'package:pandas_cake/src/pages/login/bloc/login_bloc.dart';
 

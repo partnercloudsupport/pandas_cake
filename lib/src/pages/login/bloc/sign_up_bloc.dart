@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pandas_cake/src/models/user.dart';
+import 'package:pandas_cake/src/pages/login/bloc/login_bloc.dart';
 import 'package:pandas_cake/src/resources/firestore_provider.dart';
 import 'package:pandas_cake/src/utils/firebase_util.dart';
 import 'package:rxdart/rxdart.dart';
@@ -9,7 +10,7 @@ import 'package:pandas_cake/src/utils/bloc_base.dart';
 class SignUpBloc implements BlocBase {
   SignUpBloc({this.onSignIn, this.onLogin});
 
-  final VoidCallback onSignIn;
+  final OnSignIn onSignIn;
   final VoidCallback onLogin;
   final _repository = Repository();
   final _user = new User();
@@ -42,10 +43,10 @@ class SignUpBloc implements BlocBase {
       _repository.createUserWithEmailAndPassword(_user).then((authStatus) {
         if (authStatus == AuthStatus.SUCCESS) {
           _repository
-              .save(_user.collection, _user.uid, _user.toJson())
+              .save(User.collection, _user.uid, _user.toJson())
               .then((status) {
             if (status == StoreStatus.SUCCESS) {
-              onSignIn();
+              onSignIn(_user);
             } else {
               setLoading(false);
               Scaffold.of(context).showSnackBar(new SnackBar(

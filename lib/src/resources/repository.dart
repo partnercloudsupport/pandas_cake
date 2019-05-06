@@ -22,7 +22,11 @@ class Repository {
 
   Future<StoreStatus> save(String collection, String document, Map<String, dynamic> json) => _firestoreProvider.save(collection, document, json);
 
+  Future<StoreStatus> saveList(String collection, List<Map<String, dynamic>> json) => _firestoreProvider.saveList(collection, json);
+
   Stream findAll(String collection) => _firestoreProvider.findAll(collection);
 
   Future<String> uploadImage(File file) => _firestoreStorage.uploadImage(file);
+
+  Future<User> findUser(String collection, String userUid) => _firestoreProvider.find(collection, userUid);
 }

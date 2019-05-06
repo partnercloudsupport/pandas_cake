@@ -21,10 +21,10 @@ class NewItemBloc extends BlocBase {
   final _loadingController = BehaviorSubject<bool>.seeded(false);
   final _loadingImgController = BehaviorSubject<bool>.seeded(false);
   final _stepIndexController = BehaviorSubject<int>.seeded(0);
-  final document = new NotusDocument();
-  Item item;
+  NotusDocument document;
   ZefyrController _controller;
   FocusNode _focusNode;
+  Item item;
 
   get getIndex => _stepIndexController.stream;
 
@@ -53,8 +53,10 @@ class NewItemBloc extends BlocBase {
   void init() {
     if (item == null) {
       item = new Item();
+      document = new NotusDocument();
     } else {
       _loadImage();
+      document = NotusDocument.fromJson(jsonDecode(item.description));
     }
     _controller = new ZefyrController(document);
     _focusNode = new FocusNode();
@@ -81,7 +83,7 @@ class NewItemBloc extends BlocBase {
 
     item.description = jsonEncode(document.toJson());
     _repository
-        .save(item.collection, item.id, item.toJson())
+        .save(Item.collection, item.id, item.toJson())
         .then((status) => Navigator.of(context).pop(status));
   }
 

@@ -1,11 +1,11 @@
 class User {
-  final collection = 'users';
+  static final collection = 'users';
   String uid;
   String name;
   String email;
   String password;
   String sex = 'M';
-  String valid;
+  bool isAdmin = false;
 
   User();
 
@@ -15,7 +15,7 @@ class User {
         email = json['email'],
         password = json['password'],
         sex = json['sex'],
-        valid = json['valid'];
+        isAdmin = json['isAdmin'];
 
   Map<String, dynamic> toJson() => {
         'uid': uid,
@@ -23,6 +23,6 @@ class User {
         'email': email,
         'password': password,
         'sex': sex,
-        'valid': valid
+        'isAdmin': isAdmin
       };
 }

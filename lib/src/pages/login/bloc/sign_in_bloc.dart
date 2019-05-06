@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pandas_cake/src/models/user.dart';
+import 'package:pandas_cake/src/pages/login/bloc/login_bloc.dart';
 import 'package:pandas_cake/src/utils/firebase_util.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:pandas_cake/src/resources/repository.dart';
@@ -8,7 +9,7 @@ import 'package:pandas_cake/src/utils/bloc_base.dart';
 class SignInBloc implements BlocBase {
   SignInBloc({this.onSignIn, this.onCreateAccount});
 
-  final VoidCallback onSignIn;
+  final OnSignIn onSignIn;
   final VoidCallback onCreateAccount;
   final _repository = Repository();
   final _user = new User();
@@ -37,7 +38,9 @@ class SignInBloc implements BlocBase {
     if (_validateAndSave()) {
       await _repository.signInWithEmailAndPassword(_user).then((status) {
         if (status == AuthStatus.SUCCESS) {
-          onSignIn();
+          _repository.currentUser().then((userUid) {
+            _repository.findUser(User.collection, userUid).then(onSignIn);
+          });
         } else {
           setLoading(false);
           Scaffold.of(context).showSnackBar(new SnackBar(

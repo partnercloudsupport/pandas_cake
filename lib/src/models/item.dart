@@ -1,7 +1,7 @@
 import 'dart:io';
 
 class Item {
-  final String collection = 'item';
+  static final String collection = 'item';
   String id;
   File image;
   String urlImage;
@@ -19,7 +19,7 @@ class Item {
       : urlImage = json['urlImage'],
         name = json['name'],
         description = json['description'],
-        value = json['value'] as double;
+        value = json['value'].toDouble();
 
   Map<String, dynamic> toJson() => {
     'urlImage': urlImage,
