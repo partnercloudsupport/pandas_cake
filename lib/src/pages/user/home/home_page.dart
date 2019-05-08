@@ -123,7 +123,7 @@ class _HomePageUserState extends State<HomePageUser> {
             child: Center(
                 child: Text(
               '${bloc.getCartSize}',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.white, fontSize: 10.0),
             )),
           ),
         ),

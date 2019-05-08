@@ -14,11 +14,11 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     HomeBloc bloc = BlocProvider.of<HomeBloc>(context);
 
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text('Panda\'s Cake'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Panda\'s Cake'),
         actions: <Widget>[
-          new IconButton(
+          IconButton(
             icon: Icon(Icons.exit_to_app),
             onPressed: () => bloc.signOut(),
           ),
@@ -55,10 +55,12 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildFAB(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () => _settingModalBottomSheet(context),
-      child: Icon(Icons.add),
-      elevation: 2.0,
+    return Builder(
+      builder: (context) => FloatingActionButton(
+            onPressed: () => _settingModalBottomSheet(context),
+            child: Icon(Icons.add),
+            elevation: 2.0,
+          ),
     );
   }
 
@@ -67,8 +69,8 @@ class HomePage extends StatelessWidget {
       new MaterialPageRoute<StoreStatus>(
           builder: (context) {
             return BlocProvider<NewItemBloc>(
-              child: new NewItem(),
-              bloc: new NewItemBloc(),
+              child: NewItem(),
+              bloc: NewItemBloc(),
             );
           },
           fullscreenDialog: true),
@@ -99,7 +101,7 @@ class HomePage extends StatelessWidget {
   void _showSnackBar(BuildContext context, StoreStatus status) {
     if (status == StoreStatus.SUCCESS) {
       Scaffold.of(context).showSnackBar(
-        new SnackBar(
+        SnackBar(
           content: new Text("Item salvo com sucesso!"),
         ),
       );

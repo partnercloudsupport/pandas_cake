@@ -63,13 +63,13 @@ class NewItemBloc extends BlocBase {
   }
 
   void selectImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery, maxHeight: 500, maxWidth: 500);
     _imageController.sink.add(image);
     item.image = image;
   }
 
   void openCamera() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    var image = await ImagePicker.pickImage(source: ImageSource.camera, maxHeight: 500, maxWidth: 500);
     _imageController.sink.add(image);
     item.image = image;
   }
