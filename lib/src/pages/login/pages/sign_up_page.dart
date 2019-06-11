@@ -72,12 +72,12 @@ class _SignUpState extends State<SignUpPage> {
                       ),
                 ),
                 LoginRaisedButton(
-                  label: 'Create account',
+                  label: 'Criar conta',
                   isLoading: isLoading.hasData && isLoading.data,
                   onPress: () => bloc.validateAndSubmit(context),
                 ),
                 LoginFlatButton(
-                  label: 'Have an account? Login',
+                  label: 'Possui uma conta? Login',
                   onPress: bloc.onLogin,
                 ),
               ],

@@ -8,6 +8,7 @@ import 'package:pandas_cake/src/models/item.dart';
 import 'package:pandas_cake/src/pages/admin/item/new_item_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:pandas_cake/src/utils/number_util.dart';
+import 'package:pandas_cake/src/widgets/circular_progress_indicator/circular_progress_indicator.dart';
 
 class CatalogPage extends StatelessWidget {
   @override
@@ -71,7 +72,11 @@ class CatalogPage extends StatelessWidget {
           ),
           child: CachedNetworkImage(
             imageUrl: item.urlImage,
-            placeholder: (context, url) => CircularProgressIndicator(),
+            placeholder: (context, url) => CircularLoading(
+                  width: 20.0,
+                  height: 20.0,
+                  color: Theme.of(context).accentColor,
+                ),
             errorWidget: (context, url, error) => Icon(Icons.error),
           ),
         ),

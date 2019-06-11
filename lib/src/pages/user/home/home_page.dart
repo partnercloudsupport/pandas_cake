@@ -19,48 +19,53 @@ class _HomePageUserState extends State<HomePageUser> {
   Widget build(BuildContext context) {
     bloc = BlocProvider.of<HomeBlocUser>(context);
     return Scaffold(
-      appBar: new AppBar(
-        title: new Text('Panda\'s Cake'),
-        actions: <Widget>[
-          new IconButton(
-            icon: Icon(Icons.exit_to_app),
-            onPressed: () => bloc.signOut(),
-          ),
-        ],
-      ),
-      body: StreamBuilder(
-        stream: bloc.getCurrentIndex,
-        builder: (context, navBarItem) {
-          switch (navBarItem.data) {
-            case NavBarItemUser.ORDER:
-              return BlocProvider(
-                child: OrderPage(),
-                bloc: OrderBloc(onAddCart: (order) => bloc.addToCart(order)),
-              );
-            case NavBarItemUser.CART:
-              return StreamBuilder(
-                stream: bloc.isToUpdate,
-                initialData: false,
-                builder: (context, update) {
-                  if(update.data || bloc.getCartSize == 0) {
-                    return _buildCartPage(context);
-                  } else {
-                    return CircularLoading(color: Theme.of(context).accentColor,);
-                  }
-                }
-              );
-              break;
-            default:
-              return CircularLoading(color: Theme.of(context).accentColor,);
-          }
-        },
+      //   appBar: new AppBar(
+      //     title: new Text('Panda\'s Cake'),
+      //     actions: <Widget>[
+      //       new IconButton(
+      //         icon: Icon(Icons.exit_to_app),
+      //         onPressed: () => bloc.signOut(),
+      //       ),
+      //     ],
+      //   ),
+      body: SafeArea(
+        child: StreamBuilder(
+          stream: bloc.getCurrentIndex,
+          builder: (context, navBarItem) {
+            switch (navBarItem.data) {
+              case NavBarItemUser.ORDER:
+                return BlocProvider(
+                  child: OrderPage(),
+                  bloc: OrderBloc(onAddCart: (order) => bloc.addToCart(order)),
+                );
+              case NavBarItemUser.CART:
+                return StreamBuilder(
+                    stream: bloc.isToUpdate,
+                    initialData: false,
+                    builder: (context, update) {
+                      if (update.data || bloc.getCartSize == 0) {
+                        return _buildCartPage(context);
+                      } else {
+                        return CircularLoading(
+                          color: Theme.of(context).accentColor,
+                        );
+                      }
+                    });
+                break;
+              default:
+                return CircularLoading(
+                  color: Theme.of(context).accentColor,
+                );
+            }
+          },
+        ),
       ),
       bottomNavigationBar: _buildBottomNavigation(),
     );
   }
 
   Widget _buildCartPage(BuildContext context) {
-     if (bloc.getCartSize > 0) {
+    if (bloc.getCartSize > 0) {
       return BlocProvider(
         child: CartPage(),
         bloc: CartBloc(
@@ -68,8 +73,8 @@ class _HomePageUserState extends State<HomePageUser> {
           cart: bloc.getCart,
           onSend: () {
             bloc.clearCart();
-            Scaffold.of(context).showSnackBar(SnackBar(
-                content: Text('Pedido realizado com sucesso :D')));
+            Scaffold.of(context).showSnackBar(
+                SnackBar(content: Text('Pedido realizado com sucesso :D')));
           },
         ),
       );

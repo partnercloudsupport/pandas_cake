@@ -17,8 +17,9 @@ class FirestoreProvider {
     }
   }
 
-  Future<StoreStatus> saveList(String collection, List<Map<String, dynamic>> json) async {
-    for(Map<String, dynamic> item in json) {
+  Future<StoreStatus> saveList(
+      String collection, List<Map<String, dynamic>> json) async {
+    for (Map<String, dynamic> item in json) {
       try {
         await _db.collection(collection).document(null).setData(item);
       } catch (e) {
@@ -34,7 +35,12 @@ class FirestoreProvider {
   }
 
   Future<User> find(String collection, String userUid) async {
-    var snapshot = await _db.collection(collection).document(userUid).get();
-    return User.fromJson(snapshot.data);
+    User user;
+    await _db
+        .collection(collection)
+        .document(userUid)
+        .get()
+        .then((DocumentSnapshot ds) => user = User.fromJson(ds.data));
+    return user;
   }
 }

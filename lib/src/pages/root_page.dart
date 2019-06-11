@@ -42,9 +42,12 @@ class _RootPageState extends State<RootPage> {
         primaryColor: Color(0xFFFFCCCB),
         accentColor: Colors.brown[400],
         inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(borderSide: BorderSide(color: Colors.brown[400])),
-          focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.brown[400])),
-          enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.brown[400])),
+          border: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.brown[400])),
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.brown[400])),
+          enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.brown[400])),
           labelStyle: new TextStyle(color: Colors.brown[400]),
         ),
       ),

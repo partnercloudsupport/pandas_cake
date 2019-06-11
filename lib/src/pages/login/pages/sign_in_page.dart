@@ -43,7 +43,7 @@ class _SignInState extends State<SignInPage> {
                   onPress: () => bloc.validateAndSubmit(context),
                 ),
                 LoginFlatButton(
-                  label: 'Create an account',
+                  label: 'Criar uma conta',
                   onPress: bloc.onCreateAccount,
                 )
               ],

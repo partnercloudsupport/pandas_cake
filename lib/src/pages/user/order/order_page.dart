@@ -1,72 +1,86 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:pandas_cake/src/models/item.dart';
-import 'package:pandas_cake/src/models/order.dart';
-import 'package:pandas_cake/src/pages/user/order/new_order_bloc.dart';
-import 'package:pandas_cake/src/pages/user/order/new_order_page.dart';
+import 'package:flutter/widgets.dart';
 import 'package:pandas_cake/src/pages/user/order/order_bloc.dart';
+import 'package:pandas_cake/src/pages/user/order/order_page_item.dart';
 import 'package:pandas_cake/src/utils/bloc_base.dart';
-import 'package:pandas_cake/src/utils/number_util.dart';
 
 class OrderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     OrderBloc bloc = BlocProvider.of<OrderBloc>(context);
+    bloc.init();
+    return Column(
+      children: <Widget>[
+        Expanded(flex: 1, child: _buildHeader(context, bloc)),
+        Expanded(flex: 10, child: _buildBody(bloc)),
+      ],
+    );
+  }
+
+  Widget _buildHeader(context, OrderBloc bloc) {
     return Container(
-      padding: EdgeInsets.all(8.0),
+      child: Row(
+        children: <Widget>[
+          StreamBuilder(
+            stream: bloc.isToShowbutton,
+            builder: (context, show) {
+              return AnimatedOpacity(
+                duration: Duration(milliseconds: 300),
+                opacity: (show.hasData && show.data) ? 1.0 : 0.0,
+                child: SizedBox(
+                  height: double.infinity,
+                  child: FlatButton(
+                    child: Icon(
+                      Icons.chevron_left,
+                      size: 32,
+                    ),
+                    onPressed: () => bloc.backToBegin(),
+                  ),
+                ),
+              );
+            },
+          ),
+          Expanded(
+            child: Text(
+              'Panda\'s Cake',
+              style: TextStyle(
+                fontSize: 26,
+                color: Theme.of(context).accentColor,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBody(OrderBloc bloc) {
+    return Container(
       child: StreamBuilder(
         stream: bloc.getListItems,
         builder: (streamContext, AsyncSnapshot<QuerySnapshot> items) {
           if (!items.hasData) {
             return CircularProgressIndicator();
           }
-          return ListView.builder(
+          return PageView.builder(
+            controller: bloc.pageController,
             itemCount: items.data.documents.length,
-            itemBuilder: (context, index) =>
-                _buildItemList(context, items.data.documents[index], bloc),
+            itemBuilder: (context, index) {
+              return StreamBuilder(
+                  stream: bloc.currentPage,
+                  builder: (context, currentPage) {
+                    bool active = currentPage.data == index;
+                    return OrderPageItem(
+                      document: items.data.documents[index],
+                      onSaveItem: bloc.onAddCart,
+                      active: active,
+                    );
+                  });
+            },
           );
         },
       ),
     );
-  }
-
-  Widget _buildItemList(context, DocumentSnapshot document, OrderBloc bloc) {
-    Item item = Item.fromJson(document.data);
-    return Card(
-      elevation: 4.0,
-      child: ListTile(
-        onTap: () => _settingModalBottomSheet(context, item, bloc),
-        leading: Container(
-          height: 60,
-          width: 60,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            image: DecorationImage(
-              image: CachedNetworkImageProvider(item.urlImage),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        title: Text(item.name),
-        subtitle: Text(NumberUtils.numberFormat(item.value)),
-        trailing: Icon(Icons.keyboard_arrow_right),
-      ),
-    );
-  }
-
-  Future _settingModalBottomSheet(context, Item item, OrderBloc bloc) async {
-    Order order = await Navigator.of(context).push(
-      new MaterialPageRoute<Order>(
-        builder: (context) {
-          return BlocProvider<NewOrderBloc>(
-            child: NewOrderPage(),
-            bloc: NewOrderBloc(item: item),
-          );
-        },
-        fullscreenDialog: true,
-      ),
-    );
-    bloc.onAddCart(order);
   }
 }
