@@ -5,25 +5,37 @@ import 'package:pandas_cake/src/pages/user/order/order_bloc.dart';
 import 'package:pandas_cake/src/pages/user/order/order_page_item.dart';
 import 'package:pandas_cake/src/utils/bloc_base.dart';
 
-class OrderPage extends StatelessWidget {
+OrderBloc _bloc;
+
+class OrderPage extends StatefulWidget {
+  @override
+  _OrderPageState createState() => _OrderPageState();
+}
+
+class _OrderPageState extends State<OrderPage> {
+@override
+  void initState() {
+    _bloc = BlocProvider.of<OrderBloc>(context);
+    _bloc.init();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    OrderBloc bloc = BlocProvider.of<OrderBloc>(context);
-    bloc.init();
     return Column(
       children: <Widget>[
-        Expanded(flex: 1, child: _buildHeader(context, bloc)),
-        Expanded(flex: 10, child: _buildBody(bloc)),
+        Expanded(flex: 1, child: _buildHeader()),
+        Expanded(flex: 10, child: _buildBody()),
       ],
     );
   }
 
-  Widget _buildHeader(context, OrderBloc bloc) {
+  Widget _buildHeader() {
     return Container(
       child: Row(
         children: <Widget>[
           StreamBuilder(
-            stream: bloc.isToShowbutton,
+            stream: _bloc.isToShowbutton,
             builder: (context, show) {
               return AnimatedOpacity(
                 duration: Duration(milliseconds: 300),
@@ -35,7 +47,7 @@ class OrderPage extends StatelessWidget {
                       Icons.chevron_left,
                       size: 32,
                     ),
-                    onPressed: () => bloc.backToBegin(),
+                    onPressed: () => _bloc.backToBegin(),
                   ),
                 ),
               );
@@ -55,28 +67,30 @@ class OrderPage extends StatelessWidget {
     );
   }
 
-  Widget _buildBody(OrderBloc bloc) {
+  Widget _buildBody() {
     return Container(
       child: StreamBuilder(
-        stream: bloc.getListItems,
+        stream: _bloc.getListItems,
         builder: (streamContext, AsyncSnapshot<QuerySnapshot> items) {
           if (!items.hasData) {
             return CircularProgressIndicator();
           }
           return PageView.builder(
-            controller: bloc.pageController,
+            controller: _bloc.pageController,
             itemCount: items.data.documents.length,
             itemBuilder: (context, index) {
               return StreamBuilder(
-                  stream: bloc.currentPage,
-                  builder: (context, currentPage) {
-                    bool active = currentPage.data == index;
-                    return OrderPageItem(
-                      document: items.data.documents[index],
-                      onSaveItem: bloc.onAddCart,
-                      active: active,
-                    );
-                  });
+                stream: _bloc.currentPage,
+                builder: (context, currentPage) {
+                  bool active = currentPage.data == index;
+                  return OrderPageItem(
+                    document: items.data.documents[index],
+                    onSaveItem: _bloc.onAddCart,
+                    active: active,
+                    index: index.toString(),
+                  );
+                },
+              );
             },
           );
         },

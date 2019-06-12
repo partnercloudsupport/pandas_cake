@@ -13,7 +13,7 @@ class OrderBloc extends BlocBase {
   final OnAddCart onAddCart;
   final Repository _repository = Repository();
   final _showBackButton = BehaviorSubject.seeded(false);
-  final _pageController = new PageController(viewportFraction: 0.8);
+  final _pageController = new PageController(viewportFraction: 0.9);
   final _currentPage = BehaviorSubject.seeded(0);
 
   get getListItems => _repository.findAll(Item.collection);
